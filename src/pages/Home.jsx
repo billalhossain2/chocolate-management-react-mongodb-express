@@ -20,6 +20,19 @@ const Home = () => {
     }
   };
 
+  //delete from database
+  const handleDelete = async(chocolateId)=>{
+    try {
+      const response =await fetch(`https://chocolate-management-mongo-express-server.vercel.app/chocolate/${chocolateId}`, {method:"DELETE"})
+      const result = await response.json();
+      if(result.acknowledged){
+        alert("Successfully deleted!")
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   useEffect(()=>loadChocolates)
   return (
     <div>
@@ -122,26 +135,27 @@ const Home = () => {
         </thead>
         <tbody>
           {
-            chocolates?.map(chocolate => (
-              <tr>
-            <td className="px-10 py-5">
-              <img
-                className="w-[40px] h-[40px] rounded-sm"
-                src={chocolateImg}
-                alt="chocolate Image"
-              />
-            </td>
-            <td className="px-10 py-5">Hot Pink Chocolate</td>
-            <td className="px-10 py-5">Australia</td>
-            <td className="px-10 py-5">Premium</td>
-            <td className="px-10 py-5 space-x-5">
-              <Link to="/editChocolate">
-                <i className="fa-solid fa-pen bg-[#d6cfcf] p-2 rounded-sm text-[#774320] cursor-pointer"></i>
-              </Link>
-              <i className="fa-solid fa-xmark bg-[#d6cfcf] p-2 rounded-sm text-[#774320] cursor-pointer"></i>
-            </td>
-          </tr>
-            ))
+            chocolates?.map(chocolate => {
+              const {_id, name, country, category} = chocolate;
+              return (<tr key={_id}>
+                <td className="px-10 py-5">
+                  <img
+                    className="w-[40px] h-[40px] rounded-sm"
+                    src={chocolateImg}
+                    alt="chocolate Image"
+                  />
+                </td>
+                <td className="px-10 py-5">{name}</td>
+                <td className="px-10 py-5">{country}</td>
+                <td className="px-10 py-5">{category}</td>
+                <td className="px-10 py-5 space-x-5">
+                  <Link to="/editChocolate">
+                    <i className="fa-solid fa-pen bg-[#d6cfcf] p-2 rounded-sm text-[#774320] cursor-pointer"></i>
+                  </Link>
+                  <i onClick={()=>handleDelete(_id)} className="fa-solid fa-xmark bg-[#d6cfcf] p-2 rounded-sm text-[#774320] cursor-pointer"></i>
+                </td>
+                 </tr>)
+            })
           }
         </tbody>
       </table>
