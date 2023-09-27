@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 
@@ -9,15 +9,14 @@ const AddChocolate = () => {
     const name = form.chocolateName.value;
     const country = form.country.value;
     const category = form.category.value;
-
-    const chocolate = {
+    let chocolate = {
       name,
       country,
-      category
-    }
-   
-    //add a new chocolate to mongoDB
-    fetch('https://chocolate-management-mongo-express-server.vercel.app/chocolate', {
+      category,
+    };
+
+       //add a new chocolate to mongoDB
+       fetch('https://chocolate-management-mongo-express-server.vercel.app/chocolate', {
       method:"POST",
       headers:{
         "content-type":"application/json"
@@ -28,14 +27,12 @@ const AddChocolate = () => {
     .then(result => {
       if(result.acknowledged){
         alert("Successfully added a new chocolate")
-        form.reset()
-      }else{
-        console.log("Adding a new chocolate failed!")
       }
     })
     .catch(error => console.log(error.message))
-  }
-  
+
+}
+
   return (
     <div>
       <Header></Header>
@@ -63,6 +60,18 @@ const AddChocolate = () => {
               type="text"
               name="chocolateName"
               id="name"
+            />
+          </div>
+          <div>
+            <label className="block" htmlFor="name">
+              Photo
+            </label>
+            <input
+              className="outline-none p-2 rounded-sm w-[100%]"
+              placeholder="Hot Pink Chocolate"
+              type="file"
+              name="photo"
+              id="photo"
             />
           </div>
           <div>

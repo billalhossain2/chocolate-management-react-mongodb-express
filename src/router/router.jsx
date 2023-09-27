@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <AddChocolate></AddChocolate>,
   },
   {
-    path: "/editChocolate",
+    path: "/editChocolate/:chocolateId",
     element: <EditChocolate></EditChocolate>,
   },
 ]);

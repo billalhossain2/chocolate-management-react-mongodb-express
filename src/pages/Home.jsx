@@ -149,7 +149,7 @@ const Home = () => {
                 <td className="px-10 py-5">{country}</td>
                 <td className="px-10 py-5">{category}</td>
                 <td className="px-10 py-5 space-x-5">
-                  <Link to="/editChocolate">
+                  <Link to={`/editChocolate/${_id}`}>
                     <i className="fa-solid fa-pen bg-[#d6cfcf] p-2 rounded-sm text-[#774320] cursor-pointer"></i>
                   </Link>
                   <i onClick={()=>handleDelete(_id)} className="fa-solid fa-xmark bg-[#d6cfcf] p-2 rounded-sm text-[#774320] cursor-pointer"></i>

@@ -1,8 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const EditChocolate = () => {
+  const {chocolateId} = useParams()
+
+  const [chocolate, setChocolate] = useState(null);
+  const {name, country, category} = chocolate || {};
+
+  // const [selectedCategory, setSelectedCategory] = useState("")
+  
+  const loadChocolate = async()=>{
+    const response = await fetch(`https://chocolate-management-mongo-express-server.vercel.app/chocolate/${chocolateId}`);
+    const data = await response.json();
+    setChocolate(data)
+  }
+  useEffect(()=>loadChocolate, [])
+
+  //update data
+  const handleSubmit = async(e)=>{
+    e.preventDefault()
+    const form = e.target;
+    const name = form.chocolateName.value;
+    const country = form.country.value;
+    const category = form.category.value;
+    
+    const updateChocolate = {name, country, category}
+
+    try {
+      const response = await fetch(`https://chocolate-management-mongo-express-server.vercel.app/chocolate/${chocolateId}`, {
+      method:"PUT",
+      headers:{
+        "content-type":"application/json"
+      },
+      body:JSON.stringify(updateChocolate)
+    })
+    const result = await response.json();
+    if(result.acknowledged){
+      alert("Successfully updated!")
+    }
+    } catch (error) {
+      console.log(error.message)
+    }
+    
+  }
+
   return (
     <div>
       <Header></Header>
@@ -19,7 +61,7 @@ const EditChocolate = () => {
             Use the below form to update product
           </p>
         </div>
-        <form className="w-[60%] mx-atuo p-3 space-y-4">
+        <form className="w-[60%] mx-atuo p-3 space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block" htmlFor="name">
               Name
@@ -28,8 +70,9 @@ const EditChocolate = () => {
               className="outline-none p-2 rounded-sm w-[100%]"
               placeholder="Hot Pink Chocolate"
               type="text"
-              name="name"
-              id="name"
+              name="chocolateName"
+              id="chocolateName"
+              defaultValue={name}
             />
           </div>
           <div>
@@ -41,7 +84,8 @@ const EditChocolate = () => {
               placeholder="Enter Country Name"
               type="text"
               name="country"
-              id="name"
+              id="country"
+              defaultValue={country}
             />
           </div>
           <div>
@@ -50,10 +94,11 @@ const EditChocolate = () => {
             </label>
             <select
               className="w-[100%] p-2 text-gray-500 outline-none"
-              name="Premium"
-              id="Premium"
+              name="category"
+              id="category"
             >
-              <option value="Premium">Premium</option>
+              <option defaultValue={category}>{category}</option>
+              <option value="Dark">Premium</option>
               <option value="Dark">Dark</option>
               <option value="Milk">Milk</option>
               <option value="Ruby">Ruby</option>
