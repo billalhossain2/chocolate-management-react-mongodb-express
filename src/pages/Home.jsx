@@ -8,17 +8,12 @@ const Home = () => {
 
   const [chocolates, setChocolates] = useState([])
 
-  const loadChocolates = async () => {
-    try {
-      const response = await fetch(
-        "https://chocolate-management-mongo-express-server.vercel.app/chocolates"
-      );
-      const data = await response.json();
-      setChocolates(data)
-    } catch (error) {
-      console.log(error.message)
-    }
-  };
+  useEffect(()=>{
+    fetch("https://chocolate-management-mongo-express-server.vercel.app/chocolates")
+    .then(res => res.json())
+    .then(data => setChocolates(data))
+    .catch(error => console.log(error.message))
+  }, [])
 
   //delete from database
   const handleDelete = async(chocolateId)=>{
@@ -33,7 +28,6 @@ const Home = () => {
     }
   }
 
-  useEffect(()=>loadChocolates)
   return (
     <div>
       <Header></Header>
